@@ -9,13 +9,29 @@ import {Textarea} from '@/components/ui/textarea';
 
 const AskAtlasPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [prompt, setPrompt] = useState('');
+  const [chat, setChat] = useState('');
+  const [answer, setAnswer] = useState('');
 
-  const handleButtonClick = () => {
+  const handleSendClick = () => {
     setIsLoading(true);
     // Simulate loading delay
     setTimeout(() => {
       setIsLoading(false);
+      setAnswer('Generated answer based on: ' + prompt); // Simulate an answer
     }, 2000);
+  };
+
+  const handleClearPromptClick = () => {
+    setPrompt('');
+  };
+
+  const handleClearChatClick = () => {
+    setChat('');
+  };
+
+  const handleClearAnswerClick = () => {
+    setAnswer('');
   };
 
   return (
@@ -26,28 +42,45 @@ const AskAtlasPage = () => {
       <div className="w-full max-w-md space-y-4">
         <div>
           <Label htmlFor="prompt">Prompt</Label>
-          <Input id="prompt" placeholder="Enter your geography question" />
+          <div className="flex space-x-2">
+            <Button variant="outline" size="sm" onClick={handleClearPromptClick}>
+              Clear
+            </Button>
+            <Input
+              id="prompt"
+              placeholder="Enter your geography question"
+              value={prompt}
+              onChange={e => setPrompt(e.target.value)}
+            />
+            <Button variant="primary" size="sm" disabled={isLoading} onClick={handleSendClick}>
+              {isLoading ? (
+                <>
+                  <Globe className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                'Send'
+              )}
+            </Button>
+          </div>
         </div>
+
         <div>
           <Label htmlFor="chat">Chat</Label>
+          <Button variant="outline" size="sm" onClick={handleClearChatClick}>
+            Clear
+          </Button>
           <Textarea id="chat" placeholder="Conversation history" readOnly className="h-24" />
         </div>
+
         <div>
           <Label htmlFor="answer">Answer</Label>
+          <Button variant="outline" size="sm" onClick={handleClearAnswerClick}>
+            Clear
+          </Button>
           <Textarea id="answer" placeholder="Generated answer" readOnly className="h-24" />
         </div>
       </div>
-
-      <Button variant="primary" disabled={isLoading} onClick={handleButtonClick} className="mt-8">
-        {isLoading ? (
-          <>
-            <Globe className="mr-2 h-4 w-4 animate-spin" />
-            Loading...
-          </>
-        ) : (
-          'Explore the World'
-        )}
-      </Button>
     </div>
   );
 };

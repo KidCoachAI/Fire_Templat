@@ -9,50 +9,78 @@ import {Textarea} from '@/components/ui/textarea';
 
 const LittleScholarPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [prompt, setPrompt] = useState('');
+  const [chat, setChat] = useState('');
+  const [answer, setAnswer] = useState('');
 
-  const handleButtonClick = () => {
+  const handleSendClick = () => {
     setIsLoading(true);
     // Simulate loading delay
     setTimeout(() => {
       setIsLoading(false);
+      setAnswer('Generated answer based on: ' + prompt); // Simulate an answer
     }, 2000);
   };
 
+  const handleClearPromptClick = () => {
+    setPrompt('');
+  };
+
+  const handleClearChatClick = () => {
+    setChat('');
+  };
+
+  const handleClearAnswerClick = () => {
+    setAnswer('');
+  };
+
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-screen p-4 bg-sky-100 text-black"
-      style={{
-        background: 'var(--scholar-green)',
-      }}
-    >
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-sky-100 text-black">
       <h1 className="text-4xl font-bold mb-4 text-black">LittleScholar Mode</h1>
       <p className="text-black mb-8">Homework-related content will go here.</p>
 
       <div className="w-full max-w-md space-y-4">
         <div>
           <Label htmlFor="prompt">Prompt</Label>
-          <Input id="prompt" placeholder="Enter your homework question" />
+          <div className="flex space-x-2">
+            <Button variant="outline" size="sm" onClick={handleClearPromptClick}>
+              Clear
+            </Button>
+            <Input
+              id="prompt"
+              placeholder="Enter your homework question"
+              value={prompt}
+              onChange={e => setPrompt(e.target.value)}
+            />
+            <Button variant="primary" size="sm" disabled={isLoading} onClick={handleSendClick}>
+              {isLoading ? (
+                <>
+                  <GraduationCap className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                'Send'
+              )}
+            </Button>
+          </div>
         </div>
+
         <div>
           <Label htmlFor="chat">Chat</Label>
+          <Button variant="outline" size="sm" onClick={handleClearChatClick}>
+            Clear
+          </Button>
           <Textarea id="chat" placeholder="Conversation history" readOnly className="h-24" />
         </div>
+
         <div>
           <Label htmlFor="answer">Answer</Label>
+          <Button variant="outline" size="sm" onClick={handleClearAnswerClick}>
+            Clear
+          </Button>
           <Textarea id="answer" placeholder="Generated answer" readOnly className="h-24" />
         </div>
       </div>
-
-      <Button variant="primary" disabled={isLoading} onClick={handleButtonClick} className="mt-8">
-        {isLoading ? (
-          <>
-            <GraduationCap className="mr-2 h-4 w-4 animate-spin" />
-            Loading...
-          </>
-        ) : (
-          'Start Learning'
-        )}
-      </Button>
     </div>
   );
 };
