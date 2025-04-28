@@ -43,8 +43,10 @@ const LittleScholarPage = () => {
       <p className="text-black mb-8">Homework-related content will go here.</p>
 
       <div className="w-full max-w-md space-y-4">
-        <div>
-          <Label htmlFor="prompt">Prompt</Label>
+        <div className="flex flex-col">
+          <Label htmlFor="prompt" className="text-center">
+            Prompt
+          </Label>
           <div className="flex space-x-2">
             <Button variant="outline" size="sm" onClick={handleClearPromptClick}>
               Clear
@@ -68,8 +70,10 @@ const LittleScholarPage = () => {
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="chat">Chat</Label>
+        <div className="flex flex-col">
+          <Label htmlFor="chat" className="text-center">
+            Chat
+          </Label>
           <div className="flex space-x-2">
             <Button variant="outline" size="sm">
               No
@@ -81,8 +85,10 @@ const LittleScholarPage = () => {
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="answer">Answer</Label>
+        <div className="flex flex-col">
+          <Label htmlFor="answer" className="text-center">
+            Answer
+          </Label>
           <div className="flex space-x-2">
             <Button variant="outline" size="sm" onClick={handleClearAnswerClick}>
               Clear
