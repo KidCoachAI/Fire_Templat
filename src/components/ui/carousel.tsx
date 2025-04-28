@@ -6,6 +6,18 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
+const Carousel = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("w-full overflow-hidden", className)}
+    {...props}
+  />
+))
+Carousel.displayName = "Carousel"
+
 const CarouselViewport = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -90,5 +102,6 @@ export {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  Carousel,
   CarouselViewport,
 }

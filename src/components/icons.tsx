@@ -1,4 +1,4 @@
-import { BookOpen, GraduationCap, Globe, BrainCircuit, Compass, Lightbulb, Puzzle, Robot2, Tent, Whistle } from "lucide-react";
+import { BookOpen, GraduationCap, Globe, BrainCircuit, Compass, Lightbulb, Puzzle, Robot, Tent, Whistle } from "lucide-react";
 
 export const ScholarHatPencilIcon = GraduationCap;
 export const MindMeadowIcon = Tent;
@@ -9,4 +9,4 @@ export const AskAtlasIcon = Compass;
 export const ThoughtTrailIcon = BrainCircuit;
 export const MindMosaicIcon = Puzzle;
 export const KidCoachIcon = Whistle;
-export const RobotIcon = Robot2;
+export const RobotIcon = Robot;
