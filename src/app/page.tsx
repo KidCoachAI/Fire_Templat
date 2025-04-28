@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   AskAtlasIcon,
   FableBotIcon,
@@ -108,7 +108,8 @@ export default function Home() {
   const [headerPrompt, setHeaderPrompt] = useState("Please be kind and patient.");
   const [footerPrompt, setFooterPrompt] = useState("Remember to ask clarifying questions.");
   const { toast } = useToast()
-    const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
 
   const savePrompts = () => {
@@ -119,7 +120,7 @@ export default function Home() {
   }
 
     const handleNext = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % modes.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % modes.length);
     };
 
     const handlePrevious = () => {
@@ -173,10 +174,16 @@ export default function Home() {
           </section>
 
           <section>
-            <Carousel className="w-full max-w-2xl mx-auto">
-              <CarouselContent>
-                {modes.map((mode) => (
-                  <CarouselItem key={mode.id} className="md:basis-1/2 lg:basis-1/3">
+            <Carousel
+                ref={carouselRef}
+                className="w-full max-w-2xl mx-auto"
+                opts={{
+                  loop: true,
+                }}
+              >
+              <CarouselContent style={{ scrollBehavior: 'smooth' }}>
+                {modes.map((mode, index) => (
+                  <CarouselItem key={mode.id} className="md:basis-1/2 lg:basis-1/3" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
                     <Button className="h-full w-full p-0" style={{backgroundColor: 'transparent'}} >
                       <Card className="h-full">
                         <CardHeader>
@@ -199,8 +206,8 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious  className="left-2" />
-              <CarouselNext  className="right-2" />
+              <CarouselPrevious  onClick={handlePrevious} className="left-2" />
+              <CarouselNext onClick={handleNext} className="right-2" />
             </Carousel>
           </section>
         </div>
