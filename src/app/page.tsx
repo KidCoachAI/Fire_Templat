@@ -40,7 +40,6 @@ import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import SpellChecker from "@/lib/spell-checker"; // Import the SpellChecker class
 
 const coachAvatarUrl = "https://picsum.photos/id/237/200/300";
 
@@ -134,20 +133,6 @@ interface ChatMessageEntry {
   isCorrecting?:boolean
 }
 
-// ChatMessage component to render each line of the chat
-function ChatMessage({ message, isCorrecting }: { message: ChatMessageEntry , isCorrecting: boolean }) {
-  return (
-    <div className={`mb-2 p-3 border rounded ${isCorrecting ? 'bg-gray-100' : 'text-gray-500'}`}>
-      <div>
-        <strong>User:</strong> {message.userText}
-      </div>
-      <div>
-        <strong>Corrected:</strong> {message.correctedText}
-      </div>
-    </div>
-  );
-}
-
 export default function Home() {
   // State variables for header and footer prompts
   const [headerPrompt, setHeaderPrompt] = useState("Please be kind and patient.");
@@ -156,33 +141,6 @@ export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  // State variable to store the text in the text input
-  const [inputText, setInputText] = useState("");
-  // State variable to store the chat history
-  const [chatHistory, setChatHistory] = useState<ChatMessageEntry[]>([]);
-  const [isCorrecting, setIsCorrecting] = useState(false);
-
-
-  // Create an instance of the SpellChecker class
-  const spellChecker = new SpellChecker();
-
-  // useEffect hook to load the model when the component mounts
-  useEffect(() => {
-    const loadModel = async () => {
-      try {
-        // Load the model
-        await spellChecker.loadModel({
-          progressCallback: ({ loaded, total }) => {
-            console.log(`Loading model: ${Math.round(loaded / total * 100)}%`);
-          },
-        });
-      } catch (error) {
-        console.error("Failed to load spell checker model:", error);
-      }
-    };
-
-    loadModel();
-  }, []);
 
   // Function to save the prompts
   const savePrompts = () => {
@@ -208,54 +166,6 @@ export default function Home() {
   const handleModeClick = (route: string) => {
     router.push(route);
   };
-  
-  // Function to handle text correction as it's typed
-  const handleTextChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const text = event.target.value;
-    setInputText(text);
-    if(text.length == 0){
-        setIsCorrecting(false)
-    }
-    else {
-        setIsCorrecting(true)
-    }
-    try {
-        const corrected = await spellChecker.correct(text);
-        setChatHistory((prevHistory) => [
-          ...prevHistory,
-          { userText: text, correctedText: corrected , isCorrecting:true},
-        ]);
-    } catch (error) {
-        console.error("Error during spell correction:", error);
-    }
-  };
-
-  // Function to handle the click on the correct button
-  const handleCorrect = async () => {
-    try {
-      // Correct the text
-      const corrected = await spellChecker.correct(inputText);
-      // Add the input and corrected text to the chat history
-      setChatHistory((prevHistory) => [...prevHistory, { userText: inputText, correctedText: corrected }]);
-      setInputText("")
-      setIsCorrecting(false)
-
-    } catch (error) {
-      console.error("Error during spell correction:", error);
-    }
-  };
-
-  // Function to reset the state variable and the text input to empty
-  const handleReset = () => {
-    setChatHistory([]);
-    setInputText("");
-    setIsCorrecting(false);
-  };
-
-
-
-
-
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -307,29 +217,11 @@ export default function Home() {
               Choose a mode to start learning and exploring.
             </p>
 
-            {
-              spellChecker.corrector == null && (<p>Loading Model...</p>)
-            }
+
           </section>
 
           <section>
-            {/* Input to test the spell checker */}
-            <div className="flex flex-col space-y-2 mb-4">
-              <Label htmlFor="test-input">Test Spell Checker</Label>
-              <Input
-                className= {isCorrecting ? 'bg-gray-100' : ''}
-                id="test-input"
-                value={inputText}
-                onChange={handleTextChange}
-              />
-              <Button onClick={handleCorrect}>Correct</Button>
-              <Button onClick={handleReset}>Reset</Button>
 
-            </div>
-            {/* Render the chat history */}
-            {chatHistory.map((message, index) => (
-              <ChatMessage key={index} message={message} isCorrecting={isCorrecting && index == chatHistory.length -1} />
-            ))}
             {/* Result of the corrected text 
             {correctedText && (
               <div className="mb-4 p-4 border rounded">
