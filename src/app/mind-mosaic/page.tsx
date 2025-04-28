@@ -105,3 +105,5 @@ const MindMosaicPage = () => {
 };
 
 export default MindMosaicPage;
+
+    
