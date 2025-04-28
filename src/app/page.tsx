@@ -108,6 +108,8 @@ export default function Home() {
   const [headerPrompt, setHeaderPrompt] = useState("Please be kind and patient.");
   const [footerPrompt, setFooterPrompt] = useState("Remember to ask clarifying questions.");
   const { toast } = useToast()
+    const [currentIndex, setCurrentIndex] = useState(0);
+
 
   const savePrompts = () => {
     toast({
@@ -115,6 +117,14 @@ export default function Home() {
       description: "Your custom prompts have been saved.",
     })
   }
+
+    const handleNext = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % modes.length);
+    };
+
+    const handlePrevious = () => {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + modes.length) % modes.length);
+    };
 
 
   return (
@@ -167,29 +177,30 @@ export default function Home() {
               <CarouselContent>
                 {modes.map((mode) => (
                   <CarouselItem key={mode.id} className="md:basis-1/2 lg:basis-1/3">
-                    <Card className="h-full">
-                      <CardHeader>
-                        <CardTitle className="flex items-center">
-                          <mode.icon className="mr-2 h-6 w-6 text-muted-foreground" />
-                          {mode.name}
-                        </CardTitle>
-                        <CardDescription>{mode.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          Character: {mode.character}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          Background: {mode.backgroundPattern}
-                        </p>
-                        <Button className="mt-4 w-full" style={{backgroundColor: `var(--${mode.color})`, color: 'white'}} >Explore</Button>
-                      </CardContent>
-                    </Card>
+                    <Button className="h-full w-full p-0" style={{backgroundColor: 'transparent'}} >
+                      <Card className="h-full">
+                        <CardHeader>
+                          <CardTitle className="flex items-center">
+                            <mode.icon className="mr-2 h-6 w-6 text-muted-foreground" />
+                            {mode.name}
+                          </CardTitle>
+                          <CardDescription>{mode.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground">
+                            Character: {mode.character}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Background: {mode.backgroundPattern}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </Button>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
+              <CarouselPrevious  className="left-2" />
+              <CarouselNext  className="right-2" />
             </Carousel>
           </section>
         </div>
