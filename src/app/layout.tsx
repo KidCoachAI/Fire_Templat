@@ -24,7 +24,7 @@ const comicNeue = Comic_Neue({
 });
 
 export const metadata: Metadata = {
-  title: 'KidCoach',
+  title: 'KidCoach Visual Identity System',
   description: 'A fun and educational app for kids.',
   icons: '/icon.svg',
 };
@@ -42,4 +42,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
