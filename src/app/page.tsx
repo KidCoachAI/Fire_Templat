@@ -25,6 +25,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from "@/hooks/use-toast"
+import { useRouter } from 'next/navigation';
 
 const coachAvatarUrl = "https://picsum.photos/id/237/200/300";
 
@@ -37,6 +38,7 @@ const modes = [
     character: "Owl with glasses",
     backgroundPattern: "Subtle grid paper texture",
     id: "little-scholar",
+    route: "/little-scholar" // Example route, adjust as needed
   },
   {
     name: "MindMeadow",
@@ -46,6 +48,7 @@ const modes = [
     character: "Friendly butterfly guide",
     backgroundPattern: "Gentle grass and flower patterns",
     id: "mind-meadow",
+    route: "/mind-meadow"
   },
   {
     name: "StarChat",
@@ -55,6 +58,7 @@ const modes = [
     character: "Astronaut explorer",
     backgroundPattern: "Subtle constellation patterns",
     id: "star-chat",
+    route: "/star-chat"
   },
   {
     name: "TinkerTalk",
@@ -64,6 +68,7 @@ const modes = [
     character: "Robot builder with tools",
     backgroundPattern: "Blueprint grid",
     id: "tinker-talk",
+    route: "/tinker-talk"
   },
   {
     name: "FableBot",
@@ -73,6 +78,7 @@ const modes = [
     character: "Robot storyteller with bow tie",
     backgroundPattern: "Subtle storybook page texture",
     id: "fable-bot",
+    route: "/fable-bot"
   },
   {
     name: "AskAtlas",
@@ -82,6 +88,7 @@ const modes = [
     character: "Explorer with backpack and compass",
     backgroundPattern: "Subtle map contour lines",
     id: "ask-atlas",
+    route: "/ask-atlas"
   },
   {
     name: "ThoughtTrail",
@@ -91,6 +98,7 @@ const modes = [
     character: "Hiker with notebook",
     backgroundPattern: "Subtle paper texture",
     id: "thought-trail",
+    route: "/thought-trail"
   },
   {
     name: "MindMosaic",
@@ -100,6 +108,7 @@ const modes = [
     character: "Puzzle master with 3D glasses",
     backgroundPattern: "Interlocking geometric shapes",
     id: "mind-mosaic",
+    route: "/mind-mosaic"
   },
 ];
 
@@ -110,6 +119,7 @@ export default function Home() {
   const { toast } = useToast()
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
 
   const savePrompts = () => {
@@ -126,6 +136,10 @@ export default function Home() {
     const handlePrevious = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + modes.length) % modes.length);
     };
+
+  const handleModeClick = (route: string) => {
+    router.push(route);
+  };
 
 
   return (
@@ -184,8 +198,7 @@ export default function Home() {
               <CarouselContent style={{ scrollBehavior: 'smooth' }}>
                 {modes.map((mode, index) => (
                   <CarouselItem key={mode.id} className="md:basis-1/2 lg:basis-1/3" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                    <Button className="h-full w-full p-0" style={{backgroundColor: 'transparent'}} >
-                      <Card className="h-full">
+                     <Card className="h-full cursor-pointer" onClick={() => handleModeClick(mode.route)}>
                         <CardHeader>
                           <CardTitle className="flex items-center">
                             <mode.icon className="mr-2 h-6 w-6 text-muted-foreground" />
@@ -202,7 +215,6 @@ export default function Home() {
                           </p>
                         </CardContent>
                       </Card>
-                    </Button>
                   </CarouselItem>
                 ))}
               </CarouselContent>
